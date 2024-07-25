@@ -1,0 +1,38 @@
+<div mat-dialog-title>
+  <h1>Chi tiết tham gia dự án</h1>
+</div>
+<div mat-dialog-content class="content">
+  <div class="row">
+    <div class="column">
+      <div class="detail-row">
+        <div class="title">Nhân viên:</div>
+        <div class="value">Nguyễn Hữu Nhân</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Sản phẩm CNTT:</div>
+        <div class="value">{{ data.ProductName }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Mô tả:</div>
+        <div class="value">{{ data.Description }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="title">Thời gian tham gia:</div>
+        <div class="value">
+          {{ data.DateStart | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Thời gian kết thúc:</div>
+        <div class="value">
+          {{ data.DateEnd | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="action">
+  <button mat-raised-button (click)="closeModal()">Hủy</button>
+  <!-- <button mat-raised-button color="primary" cdkFocusInitial>Lưu</button> -->
+</div>

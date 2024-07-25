@@ -1,0 +1,469 @@
+<form #projectForm="ngForm" (ngSubmit)="onSubmit(projectForm)" novalidate>
+  <div mat-dialog-title>
+    <span style="font-size: 24px">
+      {{ data ? "Cập nhật quá trình đào tạo" : "Thêm mới quá trình đào tạo" }}
+    </span>
+  </div>
+  <div mat-dialog-content class="content" #dialogContent>
+    <div class="row">
+      <div class="column">
+        <span>Từ ngày <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [matDatepicker]="datestart"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="trainingObj.DateStart"
+            maxlength="10"
+            name="DateStart"
+            required
+            #tuNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="datestart">
+          </mat-datepicker-toggle>
+          <mat-datepicker #datestart></mat-datepicker>
+          <mat-error
+            *ngIf="
+              dateError &&
+              (tuNgay.dirty || tuNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy. Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Đến ngày <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [matDatepicker]="dateend"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="trainingObj.DateEnd"
+            maxlength="10"
+            name="DateEnd"
+            required
+            #denNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="dateend">
+          </mat-datepicker-toggle>
+          <mat-datepicker #dateend></mat-datepicker>
+          <mat-error
+            *ngIf="
+              dateError &&
+              (denNgay.dirty || denNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy. Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+        <span>Đơn vị bên ngoài đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="trainingObj.Unit"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="Unit"
+            #donvibenngoai="ngModel"
+          />
+          <mat-error
+            *ngIf="donvibenngoai.errors?.['required'] && (donvibenngoai.dirty || donvibenngoai.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="donvibenngoai.errors?.['minlength'] && (donvibenngoai.dirty || donvibenngoai.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="donvibenngoai.errors?.['pattern'] && (donvibenngoai.dirty || donvibenngoai.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Đơn vị nội bộ đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="trainingObj.UnitTrain"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="UnitTrain"
+            #donvinoibo="ngModel"
+          />
+          <mat-error
+            *ngIf="donvinoibo.errors?.['required'] && (donvinoibo.dirty || donvinoibo.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="donvinoibo.errors?.['minlength'] && (donvinoibo.dirty || donvinoibo.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="donvinoibo.errors?.['pattern'] && (donvinoibo.dirty || donvinoibo.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Tên khóa đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="trainingObj.CourseTrain"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="CourseTrain"
+            #tenkhoadaotao="ngModel"
+          />
+          <mat-error
+            *ngIf="tenkhoadaotao.errors?.['required'] && (tenkhoadaotao.dirty || tenkhoadaotao.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="tenkhoadaotao.errors?.['minlength'] && (tenkhoadaotao.dirty || tenkhoadaotao.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="tenkhoadaotao.errors?.['pattern'] && (tenkhoadaotao.dirty || tenkhoadaotao.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Hình thức tổ chức <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="trainingObj.OrganizeForm"
+            required
+            name="OrganizeForm"
+            #hinhthuc="ngModel"
+          >
+            <mat-option *ngFor="let option of hinhthuctochuc" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="hinhthuc.errors?.['required'] && (hinhthuc.dirty || hinhthuc.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <!-- <input matInput type="text" [(ngModel)]="educationObj.TrinhDoDaoTao" /> -->
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Kết quả khóa đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="trainingObj.ResultTrain"
+            required
+            name="ResultTrain"
+            #ketqua="ngModel"
+          >
+            <mat-option *ngFor="let option of ketquadaotao" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="ketqua.errors?.['required'] && (ketqua.dirty || ketqua.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Điểm <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [(ngModel)]="trainingObj.Score"
+            type="number"
+            min="0"
+            max="10"
+            name="Score"
+            required
+            #diem="ngModel"
+          />
+          <mat-error
+            *ngIf="diem.errors?.['required'] && (diem.dirty || diem.touched || projectForm.submitted)"
+          >
+            Vui lòng không được để trống.
+          </mat-error>
+          <mat-error *ngIf="trainingObj.Score < 0 || trainingObj.Score > 10">
+            Điểm không được số âm và trong khoảng từ 0 đến 10.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Chi phí đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="trainingObj.CostTrain"
+            min="0"
+            max="100000000"
+            name="CostTrain"
+            required
+            #chiphi="ngModel"
+          />
+          <mat-error
+            *ngIf="chiphi.errors?.['required'] && (chiphi.dirty || chiphi.touched || projectForm.submitted)"
+          >
+            Vui lòng không được để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              trainingObj.CostTrain < 0 || trainingObj.CostTrain > 100000000
+            "
+          >
+            Chi phí không được số âm và trong khoảng từ 0 đến 100.000.000đ.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Thời gian cam kết(tháng) <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="trainingObj.TimeCommit"
+            min="0"
+            max="50"
+            name="TimeCommit"
+            required
+            #thoigiancamket="ngModel"
+          />
+          <mat-error
+            *ngIf="thoigiancamket.errors?.['required'] && (thoigiancamket.dirty || thoigiancamket.touched || projectForm.submitted)"
+          >
+            Vui lòng không được để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="trainingObj.TimeCommit < 0 || trainingObj.TimeCommit > 50"
+          >
+            Thời gian không được số âm và trong khoảng từ 0 đến 50 tháng.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Thời gian cam kết còn lại(ngày) <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="trainingObj.TimeCommitRemain"
+            min="0"
+            max="200"
+            name="TimeCommitRemain"
+            required
+            #thoigianconlai="ngModel"
+          />
+          <mat-error
+            *ngIf="thoigianconlai.errors?.['required'] && (thoigianconlai.dirty || thoigianconlai.touched || projectForm.submitted)"
+          >
+            Vui lòng không được để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              trainingObj.TimeCommitRemain < 0 ||
+              trainingObj.TimeCommitRemain > 200
+            "
+          >
+            Thời gian không được số âm và trong khoảng từ 0 đến 200 ngày.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Trạng thái <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="trainingObj.Status"
+            required
+            name="Status"
+            #trangThai="ngModel"
+          >
+            <mat-option *ngFor="let option of trangthai" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="trangThai.errors?.['required'] && (trangThai.dirty || trangThai.touched || projectForm.submitted)"
+          >
+            Vui lòng không được để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Chức danh <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="trainingObj.JobTitle"
+            name="JobTitle"
+            required
+            #chucdanh="ngModel"
+          >
+            <ngx-mat-select-search
+              [(ngModel)]="searchTermChucDanh"
+              [placeholderLabel]="'Tìm kiếm...'"
+              [noEntriesFoundLabel]="'Không có kết quả phù hợp'"
+              (ngModelChange)="filterChucDanh($event)"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ngx-mat-select-search>
+            <mat-option
+              *ngFor="let option of filteredChucDanh"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="chucdanh.errors?.['required'] && (chucdanh.dirty || chucdanh.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Kết quả các môn <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="trainingObj.ResultSubject"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="ResultSubject"
+            #ketquacacmon="ngModel"
+          />
+          <mat-error
+            *ngIf="ketquacacmon.errors?.['required'] && (ketquacacmon.dirty || ketquacacmon.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <!-- <mat-error
+            *ngIf="ketquacacmon.errors?.['minlength'] && (ketquacacmon.dirty || ketquacacmon.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error> -->
+          <mat-error
+            *ngIf="ketquacacmon.errors?.['pattern'] && (ketquacacmon.dirty || ketquacacmon.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Nội dung cam kết <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="trainingObj.ContentCommit"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="ContentCommit"
+            #noidungcamket="ngModel"
+          />
+          <mat-error
+            *ngIf="noidungcamket.errors?.['required'] && (noidungcamket.dirty || noidungcamket.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="noidungcamket.errors?.['minlength'] && (noidungcamket.dirty || noidungcamket.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="noidungcamket.errors?.['pattern'] && (noidungcamket.dirty || noidungcamket.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <div style="display: flex; align-items: center">
+          <input
+            type="checkbox"
+            [(ngModel)]="trainingObj.IssueCertificate"
+            name="IssueCertificate"
+          />
+          Được cấp chứng chỉ
+        </div>
+      </div>
+      <div class="column">
+        <div style="display: flex; align-items: center">
+          <input
+            type="checkbox"
+            [(ngModel)]="trainingObj.Contract"
+            name="Contract"
+          />
+          Ký hợp đồng đào tạo
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <span style="color: red; font-size: 12px; margin-top: 12px">
+        {{ notifyError }}
+      </span>
+    </div>
+  </div>
+  <div mat-dialog-actions class="action">
+    <button mat-raised-button type="button" (click)="closeModal()">Hủy</button>
+    <button mat-raised-button color="primary" cdkFocusInitial type="submit">
+      {{ data ? "Cập nhật" : "Thêm" }}
+    </button>
+  </div>
+</form>

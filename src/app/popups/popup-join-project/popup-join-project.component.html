@@ -1,0 +1,146 @@
+<form #projectForm="ngForm" (ngSubmit)="onSubmit(projectForm)" novalidate>
+  <div mat-dialog-title>
+    <span style="font-size: 24px">
+      {{ data ? "Cập nhật tham gia dự án" : "Thêm mới tham gia dự án" }}
+    </span>
+  </div>
+  <div mat-dialog-content class="content">
+    <div class="row">
+      <div class="column">
+        <span>Từ ngày <span class="star">*</span></span>
+        <mat-form-field appearance="outline" class="input-height">
+          <input
+            matInput
+            [matDatepicker]="datestart"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="joinprojectObj.DateStart"
+            maxlength="10"
+            name="DateStart"
+            required
+            #tuNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="datestart">
+          </mat-datepicker-toggle>
+          <mat-datepicker #datestart></mat-datepicker>
+
+          <mat-error
+            *ngIf="
+              dateError &&
+              (tuNgay.dirty || tuNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy.Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Đến ngày <span class="star">*</span></span>
+        <mat-form-field appearance="outline" class="input-height">
+          <input
+            matInput
+            [matDatepicker]="dateend"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="joinprojectObj.DateEnd"
+            maxlength="10"
+            name="DateEnd"
+            required
+            #denNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="dateend">
+          </mat-datepicker-toggle>
+          <mat-datepicker #dateend></mat-datepicker>
+
+          <mat-error
+            *ngIf="
+              dateError &&
+              (denNgay.dirty || denNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy.Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Sản phẩm CNTT <span class="star">*</span></span>
+        <mat-form-field appearance="outline" class="input-height">
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="joinprojectObj.ProductName"
+            required
+            minlength="10"
+            maxlength="100"
+            pattern="^[^@#$%^&*]+$"
+            name="ProductName"
+            #sanphamCNTT="ngModel"
+          />
+          <mat-error
+            *ngIf="sanphamCNTT.errors?.['required'] && (sanphamCNTT.dirty || sanphamCNTT.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="sanphamCNTT.errors?.['minlength'] && (sanphamCNTT.dirty || sanphamCNTT.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="sanphamCNTT.errors?.['pattern'] && (sanphamCNTT.dirty || sanphamCNTT.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Mô tả <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <textarea
+            matInput
+            [(ngModel)]="joinprojectObj.Description"
+            required
+            minlength="10"
+            maxlength="200"
+            pattern="^[^@#$%^&*]+$"
+            name="Description"
+            #mota="ngModel"
+          >
+          </textarea>
+          <mat-error
+            *ngIf="mota.errors?.['required'] && (mota.dirty || mota.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+          <mat-error
+            *ngIf="mota.errors?.['minlength'] && (mota.dirty || mota.touched || projectForm.submitted)"
+          >
+            Vui lòng nhập ít nhất 10 ký tự.
+          </mat-error>
+          <mat-error
+            *ngIf="mota.errors?.['pattern'] && (mota.dirty || mota.touched || projectForm.submitted)"
+          >
+            Không chứa các ký tự đặc biệt. Ví dụ: @, #, $,...
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <span style="color: red; font-size: 12px; margin-top: 12px">
+        {{ notifyError }}
+      </span>
+    </div>
+  </div>
+  <div mat-dialog-actions class="action">
+    <button mat-raised-button type="button" (click)="closeModal()">Hủy</button>
+    <button mat-raised-button color="primary" cdkFocusInitial type="submit">
+      {{ data ? "Cập nhật" : "Thêm" }}
+    </button>
+  </div>
+</form>

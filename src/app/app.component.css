@@ -1,0 +1,25 @@
+.main{
+    background-color: #f0f2f5;
+    height: 100%;
+}
+.header{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    background-color: #1a73e8;
+    justify-content: flex-end;
+    height: 60px;
+    font-size: 16px;
+    color: #fff;
+    padding-right: 16px;
+}
+
+.tabs{
+    background-color: #f0f2f5;
+}
+
+.tab-icon{
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}

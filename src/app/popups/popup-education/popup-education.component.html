@@ -1,0 +1,336 @@
+<form #projectForm="ngForm" (ngSubmit)="onSubmit(projectForm)" novalidate>
+  <div mat-dialog-title>
+    <span style="font-size: 24px">
+      {{ data ? "Cập nhật trình độ học vấn" : "Thêm mới trình độ học vấn" }}
+    </span>
+  </div>
+  <div mat-dialog-content class="content" #dialogContent>
+    <div class="row">
+      <div class="column">
+        <span>Thời gian học <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [matDatepicker]="datestart"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="educationObj.DateStart"
+            maxlength="10"
+            name="DateStart"
+            required
+            #tuNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="datestart">
+          </mat-datepicker-toggle>
+          <mat-datepicker #datestart></mat-datepicker>
+          <mat-error
+            *ngIf="
+              dateError &&
+              (tuNgay.dirty || tuNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy. Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Ngày cấp bằng <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [matDatepicker]="dateend"
+            placeholder="dd/mm/yyyy"
+            appOnlyNumbers
+            (ngModelChange)="onDateChange($event)"
+            [(ngModel)]="educationObj.DateEnd"
+            maxlength="10"
+            name="DateEnd"
+            required
+            #denNgay="ngModel"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="dateend">
+          </mat-datepicker-toggle>
+          <mat-datepicker #dateend></mat-datepicker>
+          <mat-error
+            *ngIf="
+              dateError &&
+              (denNgay.dirty || denNgay.touched || projectForm.submitted)
+            "
+          >
+            Định dạng ngày phải dd/mm/yyyy. Ví dụ: 07/09/2024
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+        <span>Đính kèm file</span>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [value]="filename"
+            placeholder="Bấm chọn file"
+            readonly
+            [(ngModel)]="educationObj.File"
+            name="File"
+          />
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            hidden
+            #fileInput
+            accept="application/pdf"
+          />
+          <button
+            mat-button
+            matSuffix
+            (click)="fileInput.click()"
+            class="btn-file"
+            type="button"
+          >
+            Chọn file
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Trình độ đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.StandardTrain"
+            required
+            #trinhdo="ngModel"
+            name="StandardTrain"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option *ngFor="let option of trinhdodaotao" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="trinhdo.errors?.['required'] && (trinhdo.dirty || trinhdo.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Chuyên ngành đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.SpecializedTrain"
+            name="SpecializedTrain"
+            required
+            #chuyennganh="ngModel"
+          >
+            <ngx-mat-select-search
+              [(ngModel)]="searchTermChuyenNganhDaoTao"
+              [placeholderLabel]="'Tìm kiếm...'"
+              [noEntriesFoundLabel]="'Không có kết quả phù hợp'"
+              (ngModelChange)="filterChuyenNganhDaoTao($event)"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ngx-mat-select-search>
+            <mat-option
+              *ngFor="let option of filteredChuyenNganhDaoTao"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="chuyennganh.errors?.['required'] && (chuyennganh.dirty || chuyennganh.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Ngành đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.IndustryTrain"
+            name="IndustryTrain"
+            required
+            #nganh="ngModel"
+          >
+            <ngx-mat-select-search
+              [(ngModel)]="searchTermNganhDaoTao"
+              [placeholderLabel]="'Tìm kiếm...'"
+              [noEntriesFoundLabel]="'Không có kết quả phù hợp'"
+              (ngModelChange)="filterNganhDaoTao($event)"
+              [ngModelOptions]="{ standalone: true }"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let option of filteredNganhDaoTao"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="nganh.errors?.['required'] && (nganh.dirty || nganh.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Hình thức đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.FormTrain"
+            name="FormTrain"
+            required
+            #hinhthuc="ngModel"
+          >
+            <mat-option *ngFor="let option of hinhthucdaotao" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="hinhthuc.errors?.['required'] && (hinhthuc.dirty || hinhthuc.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="column">
+        <span>Cơ sở đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.BasisTrain"
+            name="BasisTrain"
+            required
+            #coso="ngModel"
+          >
+            <ngx-mat-select-search
+              [(ngModel)]="searchTermCoSoDaoTao"
+              [placeholderLabel]="'Tìm kiếm...'"
+              [noEntriesFoundLabel]="'Không có kết quả phù hợp'"
+              (ngModelChange)="filterCoSoDaoTao($event)"
+              [ngModelOptions]="{ standalone: true }"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let option of filteredCoSoDaoTao"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="coso.errors?.['required'] && (coso.dirty || coso.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Loại đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.TypeTrain"
+            name="TypeTrain"
+            required
+            #loai="ngModel"
+          >
+            <mat-option *ngFor="let option of loaidaotao" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="loai.errors?.['required'] && (loai.dirty || loai.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <span>Xếp loại tốt nghiệp <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.DegreeClassification"
+            name="DegreeClassification"
+            required
+            #xeploai="ngModel"
+          >
+            <mat-option
+              *ngFor="let option of xeploaitotnghiep"
+              [value]="option"
+            >
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="xeploai.errors?.['required'] && (xeploai.dirty || xeploai.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="column">
+        <span>Danh hiệu đào tạo <span class="star">*</span></span>
+        <mat-form-field appearance="outline">
+          <mat-select
+            [(ngModel)]="educationObj.TitleTrain"
+            name="TitleTrain"
+            required
+            #danhhieu="ngModel"
+          >
+            <mat-option *ngFor="let option of danhhieudaotao" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="danhhieu.errors?.['required'] && (danhhieu.dirty || danhhieu.touched || projectForm.submitted)"
+          >
+            Vui lòng không để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <div style="display: flex; align-items: center">
+          <input
+            type="checkbox"
+            [(ngModel)]="educationObj.EducationLevel"
+            name="EducationLevel"
+          />
+          Trình độ học vấn ưu tiên
+        </div>
+      </div>
+      <div class="column">
+        <div style="display: flex; align-items: center">
+          <input
+            type="checkbox"
+            [(ngModel)]="educationObj.SentStudy"
+            name="SentStudy"
+          />
+          Cử đi học
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <span style="color: red; font-size: 12px; margin-top: 12px">
+        {{ notifyError }}
+      </span>
+    </div>
+  </div>
+  <div mat-dialog-actions class="action">
+    <button mat-raised-button type="button" (click)="closeModal()">Hủy</button>
+    <button mat-raised-button color="primary" cdkFocusInitial type="submit">
+      {{ data ? "Cập nhật" : "Thêm" }}
+    </button>
+  </div>
+</form>

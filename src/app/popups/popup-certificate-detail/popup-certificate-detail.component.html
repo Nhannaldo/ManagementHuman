@@ -1,0 +1,97 @@
+<div mat-dialog-title>
+  <h1>Chi tiết chứng chỉ chứng nhận</h1>
+</div>
+<div mat-dialog-content class="content">
+  <div class="row">
+    <div class="column">
+      <div class="detail-row">
+        <div class="title">Nhân viên:</div>
+        <div class="value">Nguyễn Hữu Nhân</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Văn bằng chứng chỉ:</div>
+        <div class="value">{{ data.DegreeCertificate }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Loại chứng chỉ:</div>
+        <div class="value">{{ data.TypeCertificate }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Lĩnh vực chứng chỉ:</div>
+        <div class="value">{{ data.FieldCertificate }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Chứng chỉ quốc tế:</div>
+        <div class="value">
+          <input
+            type="checkbox"
+            disabled
+            [checked]="data.InternationalCertificate"
+          />
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Mức chứng chỉ:</div>
+        <div class="value">{{ data.LevelCertificate }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">File đính kèm:</div>
+        <div class="value">
+          <a href="" style="text-decoration: none; color: blue">{{
+            data.File
+          }}</a>
+        </div>
+      </div>
+    </div>
+
+    <span style="border: 0.5px solid #ccc"></span>
+    <div class="column">
+      <div class="detail-row">
+        <div class="title">Cơ sở đào tạo:</div>
+        <div class="value">{{ data.BasisTrain }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Địa điểm đào tạo:</div>
+        <div class="value">{{ data.LocationTrain }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Cử đi học:</div>
+        <div class="value">
+          <input type="checkbox" disabled [checked]="data.SentStudy" />
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Điểm:</div>
+        <div class="value">{{ data.Score }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Kết quả xết loại:</div>
+        <div class="value">{{ data.Classification }}</div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Ngày cấp chứng chỉ:</div>
+        <div class="value">
+          {{ data.DateCertificate | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="title">Thời gian áp dụng:</div>
+        <div class="value">
+          {{ data.DateStart | date : "dd/MM/yyyy" }} -
+          {{ data.DateEnd | date : "dd/MM/yyyy" }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-weight: 600; margin-top: 24px">Ghi chú:</p>
+  <p>
+    1. Bài kiểm tra cơ bản về công nghệ mới đáp ứng chiến lược VNPT 4.0: Điểm:
+    {{ data.Score }}
+  </p>
+  <p>2. Cơ bản về công nghệ mới đáp ứng chiến lược VNPT 4.0: Đạt</p>
+</div>
+<div mat-dialog-actions class="action">
+  <button mat-raised-button (click)="closeModal()">Hủy</button>
+  <!-- <button mat-raised-button color="primary" cdkFocusInitial>Lưu</button> -->
+</div>
