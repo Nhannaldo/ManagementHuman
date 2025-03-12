@@ -25,6 +25,8 @@ export class CertificateComponent implements AfterViewInit, OnInit {
   ];
 
   dataSource = new MatTableDataSource<ICertificate>([]);
+  startDate: Date | null = null;
+  endDate: Date | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -68,6 +70,70 @@ export class CertificateComponent implements AfterViewInit, OnInit {
     this._dialog.open(PopupCertificateDetailComponent, { data });
   }
 
+  applyDateFilter() {
+    // Check if no dates are provided and reset data if so
+    if (!this.startDate && !this.endDate) {
+      console.log(
+        'No dates selected. Displaying all data:',
+        this.dataSource.data
+      );
+      return;
+    }
+    // Kiểm tra ngày bắt đầu và ngày kết thúc nhập vào và đặt giờ cho chính xác
+    const start = this.startDate
+      ? new Date(this.startDate).setHours(0, 0, 0, 0)
+      : null;
+    const end = this.endDate
+      ? new Date(this.endDate).setHours(23, 59, 59, 999)
+      : null;
+
+    // Log ra để kiểm tra
+    console.log(
+      'Ngày bắt đầu:',
+      start ? new Date(start).toLocaleDateString('vi-VN') : 'Chưa chọn'
+    );
+    console.log(
+      'Ngày kết thúc:',
+      end ? new Date(end).toLocaleDateString('vi-VN') : 'Chưa chọn'
+    );
+
+    // Lọc dữ liệu theo ba trường hợp:
+    const filteredData = this.dataSource.data.filter(
+      (education: ICertificate) => {
+        const dateStart = new Date(education.DateStart).getTime();
+        const dateEnd = new Date(education.DateEnd).getTime();
+
+        // Trường hợp chỉ nhập Ngày bắt đầu
+        if (start && !end) {
+          return dateStart >= start && dateEnd >= start;
+        }
+
+        // Trường hợp chỉ nhập Ngày kết thúc
+        if (!start && end) {
+          return dateStart <= end && dateEnd <= end; // Lọc với Ngày bắt đầu <= Ngày kết thúc và Ngày kết thúc >= Ngày bắt đầu dữ liệu
+        }
+
+        // Trường hợp nhập cả Ngày bắt đầu và Ngày kết thúc
+        if (start && end) {
+          return dateStart >= start && dateEnd <= end;
+        }
+
+        return true; // Nếu không có Ngày bắt đầu và Ngày kết thúc, trả về tất cả dữ liệu
+      }
+    );
+
+    // Gán lại dataSource với dữ liệu đã lọc
+    this.dataSource.data = filteredData;
+
+    console.log('Dữ liệu sau khi lọc:', filteredData);
+  }
+
+  refresh() {
+    // Reset date fields to empty
+    this.startDate = null;
+    this.endDate = null;
+    this.loadCertificate();
+  }
   onDelete(id: number): void {
     if (confirm('Bạn có chắc muốn xóa thông tin này?')) {
       this.masterService.deleteCertificate(id).subscribe(

@@ -50,12 +50,10 @@ app.post("/api/projects", async (req, res) => {
   const localStartDate = new Date(
     startDate.getTime() - startDate.getTimezoneOffset() * 60000
   );
+
   const localEndDate = new Date(
     endDate.getTime() - endDate.getTimezoneOffset() * 60000
   );
-
-  console.log(localStartDate.toISOString());
-  console.log(localEndDate.toISOString());
 
   try {
     const result = await pool.query(
@@ -90,9 +88,6 @@ app.put("/api/projects/:id", async (req, res) => {
   const localEndDate = new Date(
     endDate.getTime() - endDate.getTimezoneOffset() * 60000
   );
-
-  console.log(localStartDate.toISOString());
-  console.log(localEndDate.toISOString());
 
   try {
     const result = await pool.query(
@@ -314,8 +309,14 @@ app.post("/api/certificate", async (req, res) => {
     endDate.getTime() - endDate.getTimezoneOffset() * 60000
   );
   const localCerDate = new Date(
-    cerDate.getTime() - cerDate.getTimezoneOffset() * 6000
+    cerDate.getTime() - cerDate.getTimezoneOffset() * 60000
   );
+
+  console.log("INSERT");
+
+  console.log(localStartDate.toISOString());
+  console.log(localEndDate.toISOString());
+  console.log(localCerDate.toISOString());
   try {
     const result = await pool.query(
       'INSERT INTO "Certificate" (status_id, "DateStart", "DateEnd", "DateCertificate", "DegreeCertificate", "TypeCertificate", "FieldCertificate", "LevelCertificate", "File", "BasisTrain", "LocationTrain", "Classification", "Score", "SentStudy", "InternationalCertificate") VALUES ($1 ,$2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)',
@@ -375,8 +376,15 @@ app.put("/api/certificate/:id", async (req, res) => {
     endDate.getTime() - endDate.getTimezoneOffset() * 60000
   );
   const localCerDate = new Date(
-    cerDate.getTime() - cerDate.getTimezoneOffset() * 6000
+    cerDate.getTime() - cerDate.getTimezoneOffset() * 60000
   );
+
+  console.log("UPDATE");
+
+  console.log(localStartDate.toISOString());
+  console.log(localEndDate.toISOString());
+  console.log(localCerDate.toISOString());
+
   try {
     const result = await pool.query(
       'UPDATE "Certificate" SET "DateStart" = $1, "DateEnd" = $2, "DateCertificate" = $3, "DegreeCertificate" = $4 ,"TypeCertificate" = $5, "FieldCertificate" = $6, "LevelCertificate" = $7, "File" = $8, "BasisTrain" = $9, "LocationTrain" = $10, "Classification" = $11, "Score" = $12, "SentStudy" = $13, "InternationalCertificate" = $14 WHERE id = $15',
